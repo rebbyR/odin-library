@@ -22,6 +22,9 @@ Book.prototype.addBookToLibrary = function() {
 }
 
 function addBooksToDisplay() {
+  while (libraryDisplay.firstChild) {
+    libraryDisplay.removeChild(libraryDisplay.firstChild);
+  }
   for (i = 0; i < myLibrary.length; i++) {
     let bookCell = document.createElement('div');
     let bookTitle = document.createElement('p');
