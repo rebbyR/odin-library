@@ -1,10 +1,8 @@
-//query selectors
 const libraryDisplay = document.querySelector('.library-display');
-
-
-//create elements
-
-
+const userInputDialog = document.getElementById('user-input-dialog');
+const addBookButton = document.getElementById('add-book-button');
+const cancelButton = document.getElementById('cancel-button');
+const confirmButton = document.getElementById('confirm-button');
 
 
 const myLibrary = [];
@@ -21,6 +19,7 @@ Book.prototype.addBookToLibrary = function() {
   addBooksToDisplay();
 }
 
+//removes all books from display, then repopulates by running through array
 function addBooksToDisplay() {
   while (libraryDisplay.firstChild) {
     libraryDisplay.removeChild(libraryDisplay.firstChild);
@@ -47,5 +46,16 @@ function addBooksToDisplay() {
   }
 }
 
-const newBook = new Book('fellowship', 'jrr', 200, 'not read');
-const newBook2 = new Book('ex', 'test', 13, 'read');
+//show dialog
+addBookButton.addEventListener("click", () => {
+  userInputDialog.showModal();
+});
+
+cancelButton.addEventListener("click", () => {
+  userInputDialog.close();
+})
+
+confirmButton.addEventListener("click", (event) => {
+  event.preventDefault(); //stops form from actually submitting...since it can't
+  //code here (?) that sends inputs to a new book object
+})
