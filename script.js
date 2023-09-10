@@ -8,6 +8,8 @@ const titleInput = document.getElementById('title-input');
 const authorInput = document.getElementById('author-input');
 const pageCountInput = document.getElementById('page-count-input');
 const readCheckInput = document.getElementById('read-check-input');
+let readCheckButtons = document.querySelectorAll('.read, .not-read');
+
 
 const myLibrary = [];
 let newBook = undefined;
@@ -19,9 +21,44 @@ function Book(title, author, pageCount, readCheck) {
   this.readCheck = readCheck;
 }
 
+function updateReadInformation() {
+  readCheckButtons = document.querySelectorAll('.read, .not-read');
+  for (i of readCheckButtons) {
+    i.addEventListener('click', () => {
+      updateReadStatusDisplay();
+      updateReadCheckOfBooks();
+      console.log(myLibrary);  
+    });
+  }
+  return readCheckButtons;
+}
+
+function updateReadStatusDisplay() {
+  event.target.classList.toggle('read');
+  event.target.classList.toggle('not-read');  
+  if (event.target.textContent === 'read') {
+    event.target.textContent = 'not read';
+  } else {
+    event.target.textContent = 'read';
+  }
+}
+
+function updateReadCheckOfBooks() {
+  for (i = 0; i < readCheckButtons.length; i++) {
+    if (readCheckButtons[i].classList.contains('read')) {
+      myLibrary[i].readCheck = true;
+    }
+    else if (readCheckButtons[i].classList.contains('not-read')) {
+      myLibrary[i].readCheck = false;
+    }
+  }
+}
+
+//runs addBooksToDisplay() and updateButtons()
 Book.prototype.addBookToLibrary = function() {
   myLibrary.push(this);
   addBooksToDisplay();
+  updateReadInformation();
 }
 
 //removes all books from display, then repopulates by running through array
@@ -38,10 +75,13 @@ function addBooksToDisplay() {
     let bookPageCount = document.createElement('p');
     bookPageCount.textContent = myLibrary[i].pageCount;
     let bookReadCheck = document.createElement('button');
-    bookReadCheck.textContent = myLibrary[i].readCheck;
-    if (bookReadCheck.textContent === 'read') {
-      bookReadCheck.classList.toggle('read');
-    } else bookReadCheck.classList.toggle('not-read');
+    if (bookReadCheck.textContent === 'read' || bookReadCheck.textContent === 'true' || myLibrary[i].readCheck === true) {
+      bookReadCheck.classList.add('read');
+      bookReadCheck.textContent = 'read'; 
+    } else {
+      bookReadCheck.classList.toggle('not-read');
+      bookReadCheck.textContent = 'not read';
+    }
     bookCell.appendChild(bookTitle);
     bookCell.appendChild(bookAuthor);
     bookCell.appendChild(bookPageCount);
@@ -62,8 +102,10 @@ cancelButton.addEventListener("click", () => {
 
 confirmButton.addEventListener("click", (event) => {
   event.preventDefault(); //stops form from actually submitting...since it can't
-  let newBook = new Book(titleInput.value, authorInput.value, pageCountInput.value, readCheckInput.value);
+  let newBook = new Book(titleInput.value, authorInput.value, pageCountInput.value, readCheckInput.checked);
   newBook.addBookToLibrary();
   userInputDialog.close();
-  //form book object here
 })
+
+
+

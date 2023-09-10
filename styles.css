@@ -51,10 +51,12 @@ body {
 }
 
 .read {
+  content: "read";
   background-color: rgb(0, 164, 0);
   color: white;
 }
 
 .not-read {
+  content: "not read";
   background-color: white;
 }
