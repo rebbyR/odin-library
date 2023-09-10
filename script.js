@@ -3,9 +3,14 @@ const userInputDialog = document.getElementById('user-input-dialog');
 const addBookButton = document.getElementById('add-book-button');
 const cancelButton = document.getElementById('cancel-button');
 const confirmButton = document.getElementById('confirm-button');
-
+const bookForm = document.querySelector('form');
+const titleInput = document.getElementById('title-input');
+const authorInput = document.getElementById('author-input');
+const pageCountInput = document.getElementById('page-count-input');
+const readCheckInput = document.getElementById('read-check-input');
 
 const myLibrary = [];
+let newBook = undefined;
 
 function Book(title, author, pageCount, readCheck) {
   this.title = title;
@@ -49,7 +54,7 @@ function addBooksToDisplay() {
 //show dialog
 addBookButton.addEventListener("click", () => {
   userInputDialog.showModal();
-});
+});confirm
 
 cancelButton.addEventListener("click", () => {
   userInputDialog.close();
@@ -57,5 +62,8 @@ cancelButton.addEventListener("click", () => {
 
 confirmButton.addEventListener("click", (event) => {
   event.preventDefault(); //stops form from actually submitting...since it can't
-  //code here (?) that sends inputs to a new book object
+  let newBook = new Book(titleInput.value, authorInput.value, pageCountInput.value, readCheckInput.value);
+  newBook.addBookToLibrary();
+  userInputDialog.close();
+  //form book object here
 })
