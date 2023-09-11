@@ -9,10 +9,12 @@ const authorInput = document.getElementById('author-input');
 const pageCountInput = document.getElementById('page-count-input');
 const readCheckInput = document.getElementById('read-check-input');
 let readCheckButtons = document.querySelectorAll('.read, .not-read');
+//let removeButton = document.createElement('button');
+let removeButtons = document.querySelectorAll('.remove-button');
 
 
 const myLibrary = [];
-let newBook = undefined;
+//let newBook = undefined;
 
 function Book(title, author, pageCount, readCheck) {
   this.title = title;
@@ -21,13 +23,43 @@ function Book(title, author, pageCount, readCheck) {
   this.readCheck = readCheck;
 }
 
+function updateRemoveButtons() {
+  removeButtons = document.querySelectorAll('.remove-button');
+  for (i=0; i < removeButtons.length; i++) {
+    i.addEventListener('click', () => {
+      event.target.classList.toggle('to-be-removed');
+      removeBook();
+    })
+  }
+}
+
+function removeBook() {
+  for (i=0; i < removeButtons.length; i++) {
+    if (removeButtons[i].classList.contains('to-be-removed')) {
+      myLibrary.splice(i, 1);
+    }
+  }
+  console.log(myLibrary);
+  addBooksToDisplay();
+}
+
+function updateRemoveButtons() {
+  removeButtons = document.querySelectorAll('.remove-button');
+  for (i of removeButtons) {
+    i.addEventListener('click', () => {
+      event.target.classList.add('to-be-removed');
+      removeBook();
+      console.log(myLibrary);
+    })
+  }
+}
+
 function updateReadInformation() {
   readCheckButtons = document.querySelectorAll('.read, .not-read');
   for (i of readCheckButtons) {
     i.addEventListener('click', () => {
       updateReadStatusDisplay();
       updateReadCheckOfBooks();
-      console.log(myLibrary);  
     });
   }
   return readCheckButtons;
@@ -59,6 +91,7 @@ Book.prototype.addBookToLibrary = function() {
   myLibrary.push(this);
   addBooksToDisplay();
   updateReadInformation();
+  updateRemoveButtons();
 }
 
 //removes all books from display, then repopulates by running through array
@@ -82,13 +115,18 @@ function addBooksToDisplay() {
       bookReadCheck.classList.toggle('not-read');
       bookReadCheck.textContent = 'not read';
     }
+    let removeButton = document.createElement('button');
+    removeButton.textContent = 'X';
+    removeButton.classList.add('remove-button');
     bookCell.appendChild(bookTitle);
     bookCell.appendChild(bookAuthor);
     bookCell.appendChild(bookPageCount);
     bookCell.appendChild(bookReadCheck);
+    bookCell.appendChild(removeButton);
     bookCell.classList.add('book-cell');
     libraryDisplay.appendChild(bookCell);
   }
+  updateRemoveButtons();
 }
 
 //show dialog
@@ -106,6 +144,3 @@ confirmButton.addEventListener("click", (event) => {
   newBook.addBookToLibrary();
   userInputDialog.close();
 })
-
-
-
